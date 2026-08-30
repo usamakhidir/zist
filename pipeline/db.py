@@ -167,8 +167,19 @@ def get_connection():
 
 def initialize_database():
     con = get_connection()
-    con.execute(SCHEMA_SQL)
-    con.close()
+
+    try:
+        statements = [
+            statement.strip()
+            for statement in SCHEMA_SQL.split(";")
+            if statement.strip()
+        ]
+
+        for statement in statements:
+            con.execute(statement)
+
+    finally:
+        con.close()
 
 def get_import_history():
     con = get_connection()
